@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>HDL Converter</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function convCode(){
+        // Create a String
+        var number = document.getElementById("Number").value;
+
+        if(number.trim()==""){
+            alert("請輸入學號!!")
+            return false;
+        }
+        
+        // List all Elements        
+        var truth_table = "0->^b1111111;\n" 
+        for (var i=0;i<number.length;i++) {
+            //result += number.charAt(i) + "\n";
+            text = conv2Binary(number.charAt(i))
+            truth_table += (i+1)+"->^b"+text+";\n"
+        }
+
+        var result = "DEFINE\nin = [w x y z];\nou = [a b c d e f g];\nTRUTH_TABLE k\n(in->ou);\n"
+                    +truth_table+"END;\n";
+        
+        document.getElementById("Result").innerHTML = result;
+    }
+
+    function convTT(){
+        // Create a String
+        var number = document.getElementById("Number").value;
+
+        if(number.trim()==""){
+            alert("請輸入學號!!")
+            return false;
+        }
+        
+        // List all Elements        
+        var truth_table = "<tr><td>0</td><td>0000</td><td>1111111</td></tr>" 
+        for (var i=0;i<number.length;i++) {
+            //result += number.charAt(i) + "\n";
+            text = conv2Binary(number.charAt(i))
+            truth_table += "<tr><td>"+(i+1)+"</td><td>"+padStart((i+1).toString(2),4,'0')+"</td><td>"+text+"</td></tr>"
+        }
+
+        var result = '<table class="table"><thead><tr><th>10</th><th>w x y z</th><th>a b c d e f g</th></tr></thead><tbody>'
+                    +truth_table+'</tbody></table>';
+        
+        document.getElementById("tt").innerHTML = result;
+    }
+
+    function padStart(str,len,addStr) {
+        prifix=""
+        for(var i=0;i<len-str.length;i++){
+            prifix += addStr;
+        }
+        return prifix+str;
+    }
+
+    function conv2Binary(char){
+        // a b c  d e f g
+        switch (char) {
+            case "B":
+            case "b":
+                text = "1100000";
+                break;
+            case "0":
+                text = "0000001";
+                break;
+            case "1":
+                text = "1001111";
+                break;
+            case "2":
+                text = "0010010";
+                break;
+            case "3":
+                text = "0000110";
+                break;
+            case "4":
+                text = "1001100";
+                break;
+            case "5":
+                text = "0100100";
+                break;
+            case "6":
+                text = "0100000";
+                break;
+            case "7":
+                text = "0001101";
+                break;
+            case "8":
+                text = "0000000";
+                break;
+            case "9":
+                text = "0000100";
+                break;
+            default:
+                text = "1111111"; // No display
+        }
+        return text;
+    }
+
+    function changeState(e){
+        var classname = e.className.replace('space ','');
+        var cv = document.getElementById(classname).status;
+        //alert(cv);
+        if(cv==true){
+            document.getElementById(classname).status = false;
+            e.style.backgroundColor = '';            
+        }else{
+            document.getElementById(classname).status = true;
+            e.style.backgroundColor = 'crimson';
+        }
+        var x = document.querySelectorAll("input.form-check-input");
+        var text = ""
+        for(var i=0;i<x.length;i++){
+            text += x[i].status?"0":"1";
+        }
+        document.getElementById("Value").value = text;
+    }
+
+    function allON(){
+        var x = document.querySelectorAll("input.form-check-input");
+        var leds = document.querySelectorAll("div.space");
+        var text = ""
+        for(var i=0;i<x.length;i++){
+            x[i].status = true
+            text += x[i].status?"0":"1";
+            leds[i].style.backgroundColor = 'crimson';
+        }
+        document.getElementById("Value").value = text;
+    }
+
+    function allOFF(){
+        var x = document.querySelectorAll("input.form-check-input");
+        var leds = document.querySelectorAll("div.space");
+        var text = ""
+        for(var i=0;i<x.length;i++){
+            x[i].status = false
+            text += x[i].status?"0":"1";
+            leds[i].style.backgroundColor = '';
+        }
+        document.getElementById("Value").value = text;
+    }
+    
+  </script>   
+  <style>
+        .ssd{
+            position: relative;
+            height: 20em;
+            width: 14em;
+            border: solid 1px gray;
+            background-color: black;
+            padding: 1em;
+            text-align: center;
+            margin: auto;
+        }
+
+        .aa,.bb,.cc,.dd,.ee,.ff,.gg{
+            /*background-color:crimson;*/
+            border-radius: 1em;
+            position: absolute;
+            border: crimson solid 1px;
+            color: white;
+            /* margin: -1px;             */
+        }
+        .aa,.gg,.dd{
+            height: 2em;
+            width: 8em;
+            left: 3em;
+        }
+        .gg{top:9em ;}
+        .dd{bottom: 1em;}
+        .bb,.cc,.ee,.ff{
+            height: 6em;
+            width: 2em;
+            line-height: 6;
+            top: 3em;
+        }
+        .bb,.cc{
+            right: 1em;
+        }
+        .cc,.ee{
+            top: 11em;
+        }
+
+        .form-check-inline{
+            display: none;
+        }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>HDL Converter</h2>
+  <form>
+    <div class="form-group">
+      <label for="Number">Number:</label>
+      <input type="text" class="form-control" id="Number" placeholder="Enter Your Number" name="Number">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="convCode()">Convert</button>
+    <div class="form-group">
+        <label for="Result">Code:</label>
+        <textarea class="form-control" rows="5 " id="Result"></textarea>
+    </div>    
+  </form>
+  <h2>Truth Table</h2>
+  <button type="button" class="btn btn-primary" onclick="convTT()">Convert</button><br><br>
+  <div id="tt"></div>
+  
+  
+  <h2>Seven segment display</h2>
+  <div id="7seg">
+    <div class="ssd">
+        <!-- <div class="space"> </div> -->
+        <div class="space aa" onclick="changeState(this)">a</div>
+        <div class="space bb" onclick="changeState(this)">b</div>
+        <div class="space cc" onclick="changeState(this)">c</div>
+        <div class="space dd" onclick="changeState(this)">d</div>
+        <div class="space ee" onclick="changeState(this)">e</div>
+        <div class="space ff" onclick="changeState(this)">f</div>
+        <div class="space gg" onclick="changeState(this)">g</div>
+    </div>
+    <br>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="allON()">全亮</button>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" onclick="allOFF()">全不亮</button>
+    </div>
+    <br><br>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="aa" class="form-check-input" type="checkbox"> a
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="bb" class="form-check-input" type="checkbox"> b
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="cc" class="form-check-input" type="checkbox"> c
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="dd" class="form-check-input" type="checkbox"> d
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="ee" class="form-check-input" type="checkbox"> e
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="ff" class="form-check-input" type="checkbox"> f
+        </label>
+    </div>
+    <div class="form-group form-check-inline">
+        <label class="form-check-label">
+          <input id="gg" class="form-check-input" type="checkbox"> g
+        </label>
+    </div>  
+
+  </div>
+  <div class="form-group">
+    <label for="Value">Output Value(a b c d e f g):</label>
+    <input type="text" class="form-control" id="Value" name="Value" value="1111111">
+  </div>
+  
+</div>
+
+</body>
+</html>
