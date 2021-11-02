@@ -32,6 +32,29 @@
         document.getElementById("Result").innerHTML = result;
     }
 
+    function convCode2(){
+        // Create a String
+        var number = document.getElementById("Number").value;
+
+        if(number.trim()==""){
+            alert("請輸入學號!!")
+            return false;
+        }
+        
+        // List all Elements        
+        var truth_table = "";
+        for (var i=0;i<32;i++) {
+            //result += number.charAt(i) + "\n";
+            text = conv2Binary2(i,number)
+            truth_table += i+"->^b"+text+";\n"
+        }
+
+        var result = "DEFINE\nin = [Q5 Q4 Q3 Q2 Q1];\nou = [a b c d e f g];\nTRUTH_TABLE k\n(in->ou);\n"
+                    +truth_table+"END;\n";
+        
+        document.getElementById("Result2").innerHTML = result;
+    }
+
     function convTT(){
         // Create a String
         var number = document.getElementById("Number").value;
@@ -100,6 +123,34 @@
             case "9":
                 text = "0000100";
                 break;
+            default:
+                text = "1111111"; // No display
+        }
+        return text;
+    }
+
+    function conv2Binary2(int,num){
+        // a b c  d e f g
+        var text = "1111111";
+        switch (int) {
+            case 1:
+                text = conv2Binary(num.charAt(num.length-1));//學號末1碼
+                break;
+            case 2:
+                text = conv2Binary(num.charAt(num.length-2));//學號末第2碼
+                break;
+            case 4:
+                text = conv2Binary(num.charAt(num.length-3));//學號末第3碼
+                break;
+            case 17:
+                text = "1000010";//d
+                break;
+            case 18:
+                text = "0001001";//n
+                break;
+            case 20:
+                text = "0110000";//E
+                break;            
             default:
                 text = "1111111"; // No display
         }
@@ -204,20 +255,67 @@
   <h2>HDL Converter</h2>
   <form>
     <div class="form-group">
-      <label for="Number">Number:</label>
+      <label for="Number">輸入你的學號:</label>
       <input type="text" class="form-control" id="Number" placeholder="Enter Your Number" name="Number">
     </div>
-    <button type="button" class="btn btn-primary" onclick="convCode()">Convert</button>
+    <hr>
+    <button type="button" class="btn btn-primary" onclick="convCode()">第1題 Convert</button>
     <div class="form-group">
-        <label for="Result">Code:</label>
+        <label for="Result">第1題 Code:</label>
         <textarea class="form-control" rows="5 " id="Result"></textarea>
+    </div>
+    <hr>
+    <button type="button" class="btn btn-primary" onclick="convCode2()">第2題 Convert</button>
+    <div class="form-group">
+        <label for="Result2">第2題 Code:</label>
+        <textarea class="form-control" rows="5 " id="Result2"></textarea>
+        <label for="Result2">第2題計數器 Code:</label>
+        <textarea class="form-control" rows="5 " id="Result2-1">
+in = [Q5 Q4 Q3 Q2 Q1];
+ou = [Q5 Q4 Q3 Q2 Q1];
+TRUTH_TABLE k
+(in->ou);
+0->1;
+1->2;
+2->3;
+3->4;
+4->5;
+5->6;
+6->7;
+7->8;
+8->9;
+9->10;
+10->11;
+11->12;
+12->13;
+13->14;
+14->15;
+15->16;
+16->17;
+17->18;
+18->19;
+19->20;
+20->21;
+21->22;
+22->23;
+23->24;
+24->25;
+25->26;
+26->27;
+27->28;
+28->29;
+29->30;
+30->31;
+31->0;
+EDN;
+        </textarea>
     </div>    
-  </form>
+  </form><hr>
   <h2>Truth Table</h2>
   <button type="button" class="btn btn-primary" onclick="convTT()">Convert</button><br><br>
   <div id="tt"></div>
   
-  
+  <hr>
   <h2>Seven segment display</h2>
   <div id="7seg">
     <div class="ssd">
